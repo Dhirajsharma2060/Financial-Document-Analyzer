@@ -21,9 +21,6 @@ chromadb==1.1.0
 click==8.2.1
 cohere==5.18.0
 coloredlogs==15.0.1
-# Keep crewai at version 0.130.0
-# Other package versions are flexible and can be changed
-# Only change crewai version if there are critical dependency conflicts that cannot be resolved by other means
 crewai==0.130.0
 crewai-tools==0.47.1
 cryptography==46.0.1
@@ -144,6 +141,9 @@ prompt_toolkit==3.0.52
 propcache==0.3.2
 proto-plus==1.26.1
 protobuf==4.25.3
+psycopg==3.2.10
+psycopg-binary==3.2.10
+psycopg2-binary==2.9.10
 ptyprocess==0.7.0
 pure_eval==0.2.3
 pyarrow==21.0.0
