@@ -32,6 +32,7 @@ distro==1.9.0
 docker==7.1.0
 docstring_parser==0.17.0
 durationpy==0.10
+embedchain==0.1.128
 et_xmlfile==2.0.0
 executing==2.2.1
 fastapi==0.110.3
@@ -128,7 +129,7 @@ opentelemetry-semantic-conventions==0.58b0
 orjson==3.11.3
 overrides==7.7.0
 packaging==23.2
-pandas==2.2.2
+pandas==2.3.2
 parso==0.8.5
 pdfminer.six==20250506
 pdfplumber==0.11.7
