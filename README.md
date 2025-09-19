@@ -161,10 +161,83 @@ You can inspect the database using [DB Browser for SQLite](https://sqlitebrowser
 
 ---
 
+## Bugs Found and How They Were Fixed
 
-## Acknowledgements
+### main.py
 
-- [CrewAI](https://github.com/joaomdmoura/crewai)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [SQLAlchemy](https://www.sqlalchemy.org/)
-- [Google Gemini API](https://ai.google.dev/gemini-api/docs/api-key)
+- **Unused file_path in analysis:**  
+  *Bug:* The uploaded file's path was not passed to the agent/task, so the default `'data/sample.pdf'` was always used.  
+  *Fix:* The uploaded file's unique path is now passed through the workflow and used by the analysis tool.
+
+- **Function name shadowing:**  
+  *Bug:* The `analyze_financial_document` function in `main.py` shadowed the imported `analyze_financial_document` from `task.py`.  
+  *Fix:* Ensured unique function names and clear imports to avoid confusion.
+
+- **No PDF parsing in workflow:**  
+  *Bug:* The PDF was saved and deleted, but never actually read or parsed.  
+  *Fix:* The tool now reads and parses the actual uploaded PDF using the correct file path.
+
+- **Synchronous/async mismatch:**  
+  *Bug:* Async endpoints called a synchronous `run_crew` function, risking blocking.  
+  *Fix:* Ensured all I/O and analysis steps are properly async or run in a thread.
+
+- **No error handling for file read:**  
+  *Bug:* No validation for file type or PDF header.  
+  *Fix:* Added checks for file extension and PDF magic header, with clear error messages.
+
+- **Potential race condition:**  
+  *Bug:* The file was deleted in a `finally` block, risking deletion before analysis completed.  
+  *Fix:* File is now deleted only after all processing and saving is complete.
+
+---
+
+### task.py
+
+- **Missing Import for Pdf:**  
+  *Bug:* `Pdf` was referenced but not imported or defined.  
+  *Fix:* Switched to using `PyPDFLoader` from `langchain_community.document_loaders`.
+
+- **Incorrect Use of async for File I/O:**  
+  *Bug:* `read_data_tool` was async but used no async I/O.  
+  *Fix:* Made the function synchronous, or used `asyncio.to_thread` for sync code.
+
+- **Incorrect Method Definition (Missing self):**  
+  *Bug:* Methods were used as static but not decorated as such.  
+  *Fix:* Added `@staticmethod` or used class methods properly.
+
+- **Unused Imports:**  
+  *Bug:* Unused imports cluttered the file.  
+  *Fix:* Removed unused imports for clarity.
+
+- **No Error Handling for PDF Loading:**  
+  *Bug:* PDF loading could crash if the file was missing or corrupt.  
+  *Fix:* Added try/except around PDF loading.
+
+- **InvestmentTool and RiskTool Not Used:**  
+  *Note:* These tools were defined but not integrated.  
+  *Fix:* Left as-is for future extension or removed if not needed.
+
+- **No Type Hints:**  
+  *Improvement:* Added type hints for clarity.
+
+- **Class Naming Convention:**  
+  *Improvement:* Used standard Python class naming conventions.
+
+---
+
+### tools.py
+
+- **Same issues as above for PDF import, async usage, method definition, error handling, and naming conventions.**  
+  All addressed as described above.
+
+---
+
+## Additional Notes
+
+- **Import Issues:**  
+  There were some import errors due to missing or incorrect imports (such as missing PDF loader imports and incorrect usage of tool classes). These have been fixed by ensuring all necessary libraries and classes are properly imported and referenced throughout the codebase.
+
+- **Library Version Issues:**  
+  Some libraries had version incompatibilities or were missing from `requirements.txt`. These issues were resolved by updating the `requirements.txt` file and ensuring all required packages (with compatible versions) are installed.
+
+---
