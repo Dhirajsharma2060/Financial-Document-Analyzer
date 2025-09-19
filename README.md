@@ -41,7 +41,10 @@ pip install -r requirements.txt
 
 ### 3. Set Up Environment Variables
 
-Create a `.env` file in the project root with your Gemini API key:
+> **Note:**  
+> This project uses Gemini as the default LLM provider, but you can use any supported LLM (such as OpenAI, Anthropic, or a local model) by updating the agent configuration and providing the appropriate API key or setup.  
+>  
+> For Gemini, create a `.env` file in the project root with your Gemini API key:
 
 ```
 GEMINI_API_KEY=your-gemini-api-key-here
@@ -170,4 +173,4 @@ MIT License
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [Google Gemini API](https://ai.google.dev/gemini-api/docs/api-key)
-# Financial-Document-Analyzer
+# Financial-Document
