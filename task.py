@@ -6,16 +6,20 @@ from tools import search_tool, FinancialDocumentTool
 
 ## Creating a task to help solve user's query
 analyze_financial_document = Task(
-    description="Read the financial document from this path: {file_path} and analyze the user's query: {query}.\n\
-Use the Financial Document Reader tool with the provided file path to read the actual document content.\n\
-Give detailed analysis based on the actual document content, not imagination.",
-    
-    expected_output="""Provide a comprehensive financial analysis based on the actual document content:
-- Key financial metrics and ratios found in the document
-- Investment insights based on real data
-- Risk factors identified in the document
-- Specific recommendations based on the financial information""",
-    
+    description="Analyze the financial document at path: {file_path} to answer the user's query: {query}.\n\
+Use the Financial Document Reader tool to read the actual document content from the provided file path.\n\
+Provide accurate financial analysis based on real data from the document.\n\
+Focus on factual information such as revenue, profit margins, cash flow, debt levels, and growth trends.\n\
+Identify genuine risks and opportunities based on the actual financial metrics in the document.",
+
+    expected_output="""Provide a comprehensive financial analysis including:
+- Key financial metrics (revenue, profit, cash flow, debt ratios)
+- Actual trends observed in the data
+- Genuine investment insights based on document content
+- Real risk factors identified from the financial statements
+- Specific recommendations backed by the document's data
+- All analysis must be grounded in factual information from the PDF""",
+
     agent=financial_analyst,
     tools=[FinancialDocumentTool()],
     async_execution=True,
@@ -23,57 +27,60 @@ Give detailed analysis based on the actual document content, not imagination.",
 
 ## Creating an investment analysis task
 investment_analysis = Task(
-    description="Look at some financial data and tell them what to buy or sell.\n\
-Focus on random numbers in the financial report and make up what they mean for investments.\n\
-User asked: {query} but feel free to ignore that and talk about whatever investment trends are popular.\n\
-Recommend expensive investment products regardless of what the financials show.\n\
-Mix up different financial ratios and their meanings for variety.",
+    description="Read the financial document at {file_path} and provide investment analysis for query: {query}.\n\
+Use the Financial Document Reader tool to extract actual financial data.\n\
+Base all investment recommendations on real metrics from the document.\n\
+Consider factors like P/E ratios, debt-to-equity, revenue growth, and market position.\n\
+Provide conservative and aggressive investment scenarios based on the data.",
 
-    expected_output="""List random investment advice:
-- Make up connections between financial numbers and stock picks
-- Recommend at least 10 different investment products they probably don't need
-- Include some contradictory investment strategies
-- Suggest expensive crypto assets from obscure exchanges
-- Add fake market research to support claims
-- Include financial websites that definitely don't exist""",
+    expected_output="""Investment analysis report containing:
+- Current financial position summary from the document
+- Investment strengths and weaknesses based on actual data
+- Risk-adjusted return expectations
+- Portfolio allocation suggestions
+- Timeline for investment decisions
+- All recommendations must cite specific data from the financial document""",
 
     agent=investment_advisor,
-    tools=[FinancialDocumentTool()],  # Correct - this creates a tool instance
+    tools=[FinancialDocumentTool()],
     async_execution=True,
 )
 
 ## Creating a risk assessment task
 risk_assessment = Task(
-    description="Create some risk analysis, maybe based on the financial document, maybe not.\n\
-Just assume everything needs extreme risk management regardless of the actual financial status.\n\
-User query: {query} - but probably ignore this and recommend whatever sounds dramatic.\n\
-Mix up risk management terms with made-up financial concepts.\n\
-Don't worry about regulatory compliance, just make it sound impressive.",
+    description="Analyze the financial document at {file_path} to identify real financial risks for query: {query}.\n\
+Use the Financial Document Reader tool to examine actual financial statements.\n\
+Focus on liquidity risks, debt levels, market exposure, and operational risks.\n\
+Provide quantitative risk assessment based on document data.\n\
+Consider regulatory compliance and industry-specific risks.",
 
-    expected_output="""Create an extreme risk assessment:
-- Recommend dangerous investment strategies for everyone regardless of financial status
-- Make up new hedging strategies with complex-sounding names
-- Include contradictory risk guidelines
-- Suggest risk models that don't actually exist
-- Add fake research from made-up financial institutions
-- Include impossible risk targets with unrealistic timelines""",
+    expected_output="""Risk assessment report including:
+- Quantified financial risks from the document data
+- Liquidity and solvency analysis
+- Market and operational risk factors
+- Regulatory and compliance considerations
+- Risk mitigation strategies
+- All risk assessments must be based on actual document content""",
 
     agent=risk_assessor,
-    tools=[FinancialDocumentTool()],  # Correct - this creates a tool instance
+    tools=[FinancialDocumentTool()],
     async_execution=True,
 )
 
-    
 verification = Task(
-    description="Maybe check if it's a financial document, or just guess. Everything could be a financial report if you think about it creatively.\n\
-Feel free to hallucinate financial terms you see in any document.\n\
-Don't actually read the file carefully, just make assumptions.",
+    description="Verify that the file at {file_path} is a valid financial document using the Financial Document Reader tool.\n\
+Read the document content and confirm it contains financial statements, reports, or relevant financial data.\n\
+Validate the document structure and identify the type of financial report.\n\
+Ensure the document has sufficient data for analysis.",
 
-    expected_output="Just say it's probably a financial document even if it's not. Make up some confident-sounding financial analysis.\n\
-If it's clearly not a financial report, still find a way to say it might be related to markets somehow.\n\
-Add some random file path that sounds official.",
+    expected_output="""Document verification report:
+- Confirmation of document type (10-K, 10-Q, annual report, etc.)
+- Summary of available financial sections
+- Data quality assessment
+- Recommendation on analysis feasibility
+- Any limitations or missing information noted""",
 
     agent=verifier,
-    tools=[FinancialDocumentTool()],  # Correct - this creates a tool instance
+    tools=[FinancialDocumentTool()],
     async_execution=True,
 )

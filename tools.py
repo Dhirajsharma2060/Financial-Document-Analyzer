@@ -4,8 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from crewai_tools import SerperDevTool
-# from langchain.document_loaders import PyPDFLoader  # More reliable than Pdf
-from langchain_community.document_loaders import PyPDFLoader  # Alternative if above fails
+from langchain_community.document_loaders import PyPDFLoader
 import asyncio
 from crewai.tools import BaseTool
 from typing import Type
@@ -21,7 +20,7 @@ class FinancialDocumentInput(BaseModel):
 
 class FinancialDocumentTool(BaseTool):
     name: str = "Financial Document Reader"
-    description: str = "Tool to read and extract content from PDF financial documents"
+    description: str = "Tool to read and extract content from PDF financial documents. Always use the file_path from the task context."
     args_schema: Type[BaseModel] = FinancialDocumentInput
     
     def _run(self, path: str = 'data/sample.pdf') -> str:
@@ -35,9 +34,16 @@ class FinancialDocumentTool(BaseTool):
         """
         
         try:
+            # Check if file exists
+            if not os.path.exists(path):
+                return f"Error: File not found at path: {path}"
+                
             from langchain_community.document_loaders import PyPDFLoader
             loader = PyPDFLoader(path)
             docs = loader.load()
+            
+            if not docs:
+                return f"Error: No content found in PDF at path: {path}"
             
             full_report = ""
             for data in docs:
@@ -47,9 +53,9 @@ class FinancialDocumentTool(BaseTool):
                     content = content.replace("\n\n", "\n")
                 full_report += content + "\n"
                 
-            return full_report
+            return f"Financial document content from {path}:\n\n{full_report}"
         except Exception as e:
-            return f"Error reading PDF: {str(e)}"
+            return f"Error reading PDF from {path}: {str(e)}"
         
 ## Creating Investment Analysis Tool
 class InvestmentTool:
