@@ -29,7 +29,7 @@ Features include:
 ### 1. Clone the Repository
 
 ```sh
-git clone <your-repo-url>
+git clone https://github.com/Dhirajsharma2060/Financial-Document-Analyzer.git
 cd financial-document-analyzer-debug
 ```
 
