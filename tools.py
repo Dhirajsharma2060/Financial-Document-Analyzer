@@ -38,7 +38,7 @@ class FinancialDocumentTool(BaseTool):
             if not os.path.exists(path):
                 return f"Error: File not found at path: {path}"
                 
-            from langchain_community.document_loaders import PyPDFLoader
+            # Removed redundant inner import; using top-level PyPDFLoader import
             loader = PyPDFLoader(path)
             docs = loader.load()
             
