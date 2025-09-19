@@ -6,84 +6,81 @@ load_dotenv()
 print("GEMINI_API_KEY loaded:", os.getenv("GEMINI_API_KEY") is not None)
 
 from crewai import Agent, LLM
-from tools import search_tool, FinancialDocumentTool
+from tools import search_tool, FinancialDocumentTool ,FinancialDocumentTool, InvestmentTool, RiskTool  # added
 
 # Use CrewAI's built-in LLM class for Gemini
 llm = LLM(
     model="gemini/gemini-2.0-flash",
-    temperature=0.3,  # Lower temperature for more factual responses
+    temperature=0.3,  # Lower temperature for more consistent outputs
 )
 
 # Creating an Experienced Financial Analyst agent
 financial_analyst = Agent(
     role="Senior Financial Analyst",
-    goal="Provide accurate, data-driven financial analysis based on the user's query: {query} using only factual information from the financial document",
+    goal="Provide clear, natural financial analysis in paragraph form based on the user's query: {query} using data from specialized tools",
     verbose=True,
     memory=True,
     backstory=(
-        "You are a certified financial analyst with 15+ years of experience in financial statement analysis. "
-        "You specialize in reading and interpreting financial documents, calculating key ratios, and identifying trends. "
-        "You always base your analysis on factual data and provide conservative, well-researched recommendations. "
-        "You follow SEC guidelines and industry best practices for financial analysis. "
-        "You never make investment recommendations without proper data backing."
+        "You are a certified financial analyst with 15+ years of experience. "
+        "You write clear, professional analysis reports in natural language paragraphs. "
+        "You use your tools to extract specific metrics and then explain what they mean in plain English. "
+        "You provide insights like you're explaining to an intelligent investor, not dumping raw data. "
+        "You write in a conversational but professional tone, highlighting key findings and their implications."
     ),
-    tools=[FinancialDocumentTool()],
+    tools=[FinancialDocumentTool(), InvestmentTool(), RiskTool()],
     llm=llm,
-    max_iter=3,
-    max_rpm=3,
+    max_iter=5,  # Increased from 3
+    max_rpm=10,  # Increased from 3
     allow_delegation=True
 )
 
 # Creating a document verifier agent
 verifier = Agent(
     role="Financial Document Verification Specialist",
-    goal="Verify the authenticity and completeness of financial documents to ensure they contain sufficient data for analysis",
+    goal="Verify document quality and provide a brief assessment in natural language",
     verbose=True,
     memory=True,
     backstory=(
-        "You are a compliance specialist with expertise in financial document verification. "
-        "You ensure all documents meet regulatory standards and contain required financial disclosures. "
-        "You can identify different types of financial reports and assess their reliability. "
-        "You flag any missing information or potential issues with document quality."
+        "You are a compliance specialist who quickly assesses document quality. "
+        "You provide brief, clear summaries of what type of document it is and whether it's suitable for analysis. "
+        "You communicate in simple, direct language."
     ),
     llm=llm,
-    max_iter=2,
-    max_rpm=2,
+    max_iter=2,  # Keep low for simple verification
+    max_rpm=5,   # Moderate for verification
     allow_delegation=True
 )
 
 investment_advisor = Agent(
     role="Investment Advisory Specialist",
-    goal="Provide prudent investment recommendations based on thorough analysis of financial documents and market conditions",
+    goal="Provide practical investment advice in clear, conversational language based on financial analysis",
     verbose=True,
     memory=True,
     backstory=(
-        "You are a licensed investment advisor with expertise in portfolio management and risk assessment. "
-        "You provide evidence-based investment recommendations following fiduciary standards. "
-        "You consider client risk tolerance, investment horizons, and market conditions. "
-        "You never recommend investments without proper due diligence and risk analysis. "
-        "You are committed to client education and transparent communication about investment risks."
+        "You are a licensed investment advisor who explains complex financial concepts in simple terms. "
+        "You provide practical, actionable investment advice that ordinary investors can understand. "
+        "You write like you're having a conversation with a client, explaining your reasoning clearly. "
+        "You always consider risk and provide balanced perspectives."
     ),
     llm=llm,
-    max_iter=2,
-    max_rpm=2,
+    max_iter=4,  # Moderate for advisory
+    max_rpm=8,   # Higher for complex analysis
     allow_delegation=False
 )
 
 risk_assessor = Agent(
     role="Financial Risk Assessment Expert",
-    goal="Conduct comprehensive risk analysis based on financial data to identify and quantify potential investment risks",
+    goal="Identify and explain financial risks in clear, understandable language",
     verbose=True,
     memory=True,
     backstory=(
-        "You are a risk management professional with expertise in financial risk assessment and quantitative analysis. "
-        "You specialize in credit risk, market risk, operational risk, and liquidity risk evaluation. "
-        "You use established risk management frameworks and statistical models. "
-        "You provide actionable risk mitigation strategies based on empirical data. "
-        "You maintain objectivity and provide balanced risk assessments."
+        "You are a risk management expert who explains financial risks in plain English. "
+        "You help investors understand what could go wrong and how to protect themselves. "
+        "You write clear explanations of risk factors and practical mitigation strategies. "
+        "You communicate risk levels and their implications in language that anyone can understand."
     ),
     llm=llm,
-    max_iter=2,
-    max_rpm=2,
+    max_iter=4,  # Moderate for risk analysis
+    max_rpm=8,   # Higher for thorough analysis
     allow_delegation=False
 )

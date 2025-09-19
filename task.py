@@ -1,27 +1,36 @@
 ## Importing libraries and files
 from crewai import Task
 
-from agents import financial_analyst, verifier , investment_advisor , risk_assessor
-from tools import search_tool, FinancialDocumentTool
+from agents import financial_analyst, verifier, investment_advisor, risk_assessor
+from tools import search_tool, FinancialDocumentTool, InvestmentTool, RiskTool
 
 ## Creating a task to help solve user's query
 analyze_financial_document = Task(
     description="Analyze the financial document at path: {file_path} to answer the user's query: {query}.\n\
-Use the Financial Document Reader tool to read the actual document content from the provided file path.\n\
-Provide accurate financial analysis based on real data from the document.\n\
-Focus on factual information such as revenue, profit margins, cash flow, debt levels, and growth trends.\n\
-Identify genuine risks and opportunities based on the actual financial metrics in the document.",
+Use the Financial Document Reader tool to read the document content.\n\
+Use the Investment Analysis Tool and Risk Assessment Tool to extract key metrics.\n\
+Provide ONLY your analytical insights and recommendations.\n\
+DO NOT include or repeat any raw document content, tables, or data dumps in your response.\n\
+Your response should be a clean, professional analysis written in natural language.",
 
-    expected_output="""Provide a comprehensive financial analysis including:
-- Key financial metrics (revenue, profit, cash flow, debt ratios)
-- Actual trends observed in the data
-- Genuine investment insights based on document content
-- Real risk factors identified from the financial statements
-- Specific recommendations backed by the document's data
-- All analysis must be grounded in factual information from the PDF""",
+    expected_output="""Provide a clean, professional financial analysis consisting of well-structured paragraphs only. Include:
+
+1. Executive summary (2-3 sentences about the company's current situation)
+2. Financial performance highlights with your interpretation
+3. Investment insights and business developments  
+4. Risk assessment and factors to watch
+5. Clear investment recommendation with reasoning
+
+Write in natural, conversational paragraphs. Do NOT include:
+- Raw PDF content or data tables
+- Direct quotes from the document
+- Unformatted financial statements
+- Any content that looks like it was copied from the source
+
+Keep the response focused, analytical, and professional.""",
 
     agent=financial_analyst,
-    tools=[FinancialDocumentTool()],
+    tools=[FinancialDocumentTool(), InvestmentTool(), RiskTool()],
     async_execution=True,
 )
 
@@ -42,7 +51,7 @@ Provide conservative and aggressive investment scenarios based on the data.",
 - All recommendations must cite specific data from the financial document""",
 
     agent=investment_advisor,
-    tools=[FinancialDocumentTool()],
+    tools=[FinancialDocumentTool(),InvestmentTool(), RiskTool()],
     async_execution=True,
 )
 
@@ -63,7 +72,7 @@ Consider regulatory compliance and industry-specific risks.",
 - All risk assessments must be based on actual document content""",
 
     agent=risk_assessor,
-    tools=[FinancialDocumentTool()],
+    tools=[FinancialDocumentTool(),InvestmentTool(), RiskTool()],
     async_execution=True,
 )
 
@@ -81,6 +90,6 @@ Ensure the document has sufficient data for analysis.",
 - Any limitations or missing information noted""",
 
     agent=verifier,
-    tools=[FinancialDocumentTool()],
+    tools=[FinancialDocumentTool(),InvestmentTool(), RiskTool()],
     async_execution=True,
 )

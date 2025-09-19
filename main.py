@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 
 from crewai import Crew, Process
-from agents import financial_analyst
+from agents import financial_analyst , verifier , investment_advisor , risk_assessor
 from task import analyze_financial_document
 from db import engine, SessionLocal
 from models import Base, AnalysisResult
@@ -18,7 +18,7 @@ Base.metadata.create_all(bind=engine)
 async def run_crew(query: str, file_path: str="data/sample.pdf"):
     """To run the whole crew asynchronously using kickoff_async"""
     financial_crew = Crew(
-        agents=[financial_analyst],
+        agents=[financial_analyst,verifier, investment_advisor, risk_assessor],
         tasks=[analyze_financial_document],
         process=Process.sequential,
     )
