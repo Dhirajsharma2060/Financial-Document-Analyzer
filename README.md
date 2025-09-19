@@ -161,11 +161,6 @@ You can inspect the database using [DB Browser for SQLite](https://sqlitebrowser
 
 ---
 
-## License
-
-MIT License
-
----
 
 ## Acknowledgements
 
