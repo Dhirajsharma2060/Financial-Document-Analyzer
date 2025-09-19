@@ -168,4 +168,3 @@ You can inspect the database using [DB Browser for SQLite](https://sqlitebrowser
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [Google Gemini API](https://ai.google.dev/gemini-api/docs/api-key)
-# Financial-Document
