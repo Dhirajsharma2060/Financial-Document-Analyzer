@@ -10,3 +10,4 @@ langchain-google-genai
 langchain-community
 embedchain
 python-dotenv
+psycopg2-binary
