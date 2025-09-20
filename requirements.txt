@@ -45,7 +45,7 @@ filetype==1.2.0
 flatbuffers==25.2.10
 frozenlist==1.7.0
 fsspec==2025.9.0
-google-ai-generativelanguage==0.6.4
+#google-ai-generativelanguage==0.6.4
 google-api-core==2.25.1
 google-api-python-client==2.131.0
 google-auth==2.29.0
