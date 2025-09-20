@@ -241,3 +241,6 @@ You can inspect the database using [DB Browser for SQLite](https://sqlitebrowser
   Some libraries had version incompatibilities or were missing from `requirements.txt`. These issues were resolved by updating the `requirements.txt` file and ensuring all required packages (with compatible versions) are installed.
 
 ---
+
+## Live Demo
+Try the deployed app here: https://financial-document-analyzer-1-qb10.onrender.com/
